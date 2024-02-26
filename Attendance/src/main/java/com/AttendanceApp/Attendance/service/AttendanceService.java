@@ -6,6 +6,7 @@ import com.AttendanceApp.Attendance.dto.LectureDto;
 import com.AttendanceApp.Attendance.dto.LectureRequestDto;
 import com.AttendanceApp.Attendance.dto.StudentDto;
 import com.AttendanceApp.Attendance.dto.StudentRequestDto;
+import com.AttendanceApp.Attendance.dto.TeacherDto;
 import com.AttendanceApp.Attendance.entity.Classs;
 import com.AttendanceApp.Attendance.entity.Course;
 import com.AttendanceApp.Attendance.entity.Lecture;
@@ -124,6 +125,28 @@ public class AttendanceService {
             //noinspection LoggingPlaceholderCountMatchesArgumentCount
             log.error("Failed due to Exception : {}", e);
             return new ResponseEntity<>(new LectureDto(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public ResponseEntity<TeacherDto> saveTeacher(TeacherDto requestDto, String randomUUID) {
+        try {
+            log.info("Adding Lecture");
+            Teacher presentTeacher=teacherRepository.findByEmailId(requestDto.getEmailId());
+            if(!Objects.isNull(presentTeacher)) {
+                log.error("Student with EmailId : {} already exists.", presentTeacher.getEmailId());
+                return new ResponseEntity<>(presentTeacher.toDto(), HttpStatus.BAD_REQUEST);
+            }
+            Teacher teacher=new Teacher();
+            teacher.setEmailId(requestDto.getEmailId());
+            teacher.setName(requestDto.getName());
+            teacher.setHashedPassword(requestDto.getHashedPassword());
+            Teacher savedTeacher=teacherRepository.save(teacher);
+            return new ResponseEntity<>(savedTeacher.toDto(),HttpStatus.CREATED);
+        }
+        catch (Exception e) {
+            //noinspection LoggingPlaceholderCountMatchesArgumentCount
+            log.error("Failed due to Exception : {}", e);
+            return new ResponseEntity<>(new TeacherDto(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

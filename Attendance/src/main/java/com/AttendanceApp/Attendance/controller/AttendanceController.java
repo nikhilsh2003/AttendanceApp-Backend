@@ -6,6 +6,8 @@ import com.AttendanceApp.Attendance.dto.LectureDto;
 import com.AttendanceApp.Attendance.dto.LectureRequestDto;
 import com.AttendanceApp.Attendance.dto.StudentDto;
 import com.AttendanceApp.Attendance.dto.StudentRequestDto;
+import com.AttendanceApp.Attendance.dto.TeacherDto;
+import com.AttendanceApp.Attendance.entity.Teacher;
 import com.AttendanceApp.Attendance.repository.AttendanceRepository;
 import com.AttendanceApp.Attendance.repository.ClasssRepository;
 import com.AttendanceApp.Attendance.repository.CourseRepository;
@@ -75,5 +77,11 @@ public class AttendanceController {
         String randomUUID = UUID.randomUUID().toString();
         log.info("Saving Course : Request System Key : {}", randomUUID);
         return attendanceService.saveLecture(requestDto, randomUUID);
+    }
+    @PostMapping(path = "/addTeacher")
+    public ResponseEntity<TeacherDto> addTeacher(@RequestBody TeacherDto requestDto) {
+        String randomUUID = UUID.randomUUID().toString();
+        log.info("Saving Student : Request System Key : {}", randomUUID);
+        return attendanceService.saveTeacher(requestDto,randomUUID);
     }
 }
